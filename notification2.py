@@ -12,18 +12,32 @@ import os
 import urllib.parse
 
 
-APP_NAME = 'analysis_app'
-SA_PATH = r"D:\software enginnering\1st Semester\data analysis agriculture\scripts\serviceAccountKey.json"
+firebase_config = {
+    "type": st.secrets["type"],
+    "project_id": st.secrets["project_id"],
+    "private_key_id": st.secrets["private_key_id"],
+    "private_key": st.secrets["private_key"].replace("\\n", "\n"),
+    "client_email": st.secrets["client_email"],
+    "client_id": st.secrets["client_id"],
+    "auth_uri": st.secrets["auth_uri"],
+    "token_uri": st.secrets["token_uri"],
+    "auth_provider_x509_cert_url": st.secrets["auth_provider_x509_cert_url"],
+    "client_x509_cert_url": st.secrets["client_x509_cert_url"],
+    "universe_domain": st.secrets.get("universe_domain", "googleapis.com") # Optional fallback
+}
+
+cred = credentials.Certificate(firebase_config)
 
 # Firebase Setup
-cred = credentials.Certificate(SA_PATH)
+APP_NAME = 'analysis_app'
+
 try:
     app = firebase_admin.get_app(APP_NAME)
 except ValueError:
     app = firebase_admin.initialize_app(
         cred,
         {
-            'storageBucket': 'agrobotix-d23e1',
+            'storageBucket': 'agrobotix-d23e1',  # your bucket name
             'databaseURL': 'https://agrobotix-d23e1-default-rtdb.europe-west1.firebasedatabase.app/'
         },
         name=APP_NAME
